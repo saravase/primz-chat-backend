@@ -47,5 +47,4 @@ func NewHandler(c *Config) {
 		g.PUT("/:org_id", h.Update)
 		g.DELETE("/:org_id", h.Delete)
 	}
-
 }

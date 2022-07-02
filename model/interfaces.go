@@ -7,14 +7,20 @@ import (
 
 type UserService interface {
 	Get(ctx context.Context, uid string) (*User, error)
+	GetUsers(ctx context.Context) ([]*User, error)
 	Signup(ctx context.Context, u *User) error
 	Signin(ctx context.Context, u *User) error
+	Update(ctx context.Context, id string, user *User) error
+	Delete(ctx context.Context, id string) error
 }
 
 type UserRepository interface {
+	Find(ctx context.Context) ([]*User, error)
 	FindByID(ctx context.Context, uid string) (*User, error)
 	FindByEmail(ctx context.Context, email string) (*User, error)
 	Create(ctx context.Context, u *User) error
+	Update(ctx context.Context, id string, user *User) error
+	Delete(ctx context.Context, id string) error
 }
 
 type TokenService interface {

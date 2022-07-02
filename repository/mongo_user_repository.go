@@ -59,3 +59,15 @@ func (r *mongoUserRepository) FindByEmail(ctx context.Context, email string) (*m
 
 	return user, nil
 }
+
+func (r *mongoUserRepository) Find(ctx context.Context) ([]*model.User, error) {
+	return nil, nil
+}
+
+func (r *mongoUserRepository) Update(ctx context.Context, id string, user *model.User) error {
+	return nil
+}
+
+func (r *mongoUserRepository) Delete(ctx context.Context, id string) error {
+	return nil
+}

@@ -70,3 +70,15 @@ func (s *userService) Signin(ctx context.Context, u *model.User) error {
 	*u = *uFetched
 	return nil
 }
+
+func (s *userService) GetUsers(ctx context.Context) ([]*model.User, error) {
+	return nil, nil
+}
+
+func (s *userService) Update(ctx context.Context, id string, user *model.User) error {
+	return nil
+}
+
+func (s *userService) Delete(ctx context.Context, id string) error {
+	return nil
+}
