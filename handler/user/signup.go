@@ -1,4 +1,4 @@
-package auth
+package user
 
 import (
 	"log"
@@ -16,8 +16,21 @@ type signupReq struct {
 	Email     string `json:"email" binding:"required,email"`
 	Password  string `json:"password" binding:"required,gte=6,lte=30"`
 	Role      string `json:"role" validate:"required, eq=ADMIN|eq=USER"`
-}
+} // @name signupReq
 
+// Signup godoc
+// @Summary      signup chat application
+// @Description  signup chat application
+// @Tags         auth
+// @Accept       json
+// @Produce      json
+// @Param        message   body  signupReq  true  "Signup Payload"
+// @Success      200  {object}  model.TokenPair
+// @Failure      500  {object}  apperrors.Error
+// @Failure      415  {object}  apperrors.Error
+// @Failure      400  {object}  apperrors.Error
+// @Failure      404  {object}  apperrors.Error
+// @Router       /api/auth/signup [post]
 func (h *Handler) Signup(c *gin.Context) {
 	var req signupReq
 	if ok := handler.BindData(c, &req); !ok {
@@ -54,7 +67,5 @@ func (h *Handler) Signup(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{
-		"tokens": tokens,
-	})
+	c.JSON(http.StatusCreated, tokens)
 }

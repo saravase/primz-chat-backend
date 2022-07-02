@@ -13,6 +13,9 @@ type Config interface {
 	Dsn() string
 	DbName() string
 	AuthBaseURL() string
+	OrgBaseURL() string
+	ChannelBaseURL() string
+	MessageBaseURL() string
 	HandlerTimeout() int64
 	IdTokenExp() int64
 	RefreshTokenExp() int64
@@ -30,6 +33,9 @@ type config struct {
 	dbName          string
 	dsn             string
 	authBaseURL     string
+	orgBaseURL      string
+	channelBaseURL  string
+	messageBaseURL  string
 	handlerTimeout  int
 	idTokenExp      int
 	refreshSecret   string
@@ -55,6 +61,9 @@ func NewConfig() Config {
 	}
 	cfg.dsn = fmt.Sprintf("mongodb://%s:%s@%s:%d/%s", cfg.dbUser, cfg.dbPass, cfg.dbHost, cfg.dbPort, cfg.dbName)
 	cfg.authBaseURL = os.Getenv("AUTH_BASE_URL")
+	cfg.orgBaseURL = os.Getenv("ORG_BASE_URL")
+	cfg.channelBaseURL = os.Getenv("CHANNEL_BASE_URL")
+	cfg.messageBaseURL = os.Getenv("MESSAGE_BASE_URL")
 	cfg.handlerTimeout, err = strconv.Atoi(os.Getenv("HANDLER_TIMEOUT"))
 	if err != nil {
 		log.Fatalln("Error on load env var:", err.Error())
@@ -87,6 +96,18 @@ func (c *config) DbPort() int {
 
 func (c *config) AuthBaseURL() string {
 	return c.authBaseURL
+}
+
+func (c *config) OrgBaseURL() string {
+	return c.orgBaseURL
+}
+
+func (c *config) ChannelBaseURL() string {
+	return c.channelBaseURL
+}
+
+func (c *config) MessageBaseURL() string {
+	return c.messageBaseURL
 }
 
 func (c *config) HandlerTimeout() int64 {

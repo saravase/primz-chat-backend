@@ -1,4 +1,4 @@
-package auth
+package org
 
 import (
 	"time"
@@ -12,12 +12,14 @@ import (
 type Handler struct {
 	UserService  model.UserService
 	TokenService model.TokenService
+	OrgService   model.OrgService
 }
 
 type Config struct {
 	R               *gin.Engine
 	UserService     model.UserService
 	TokenService    model.TokenService
+	OrgService      model.OrgService
 	BaseURL         string
 	TimeoutDuration time.Duration
 }
@@ -27,20 +29,23 @@ func NewHandler(c *Config) {
 	h := &Handler{
 		UserService:  c.UserService,
 		TokenService: c.TokenService,
+		OrgService:   c.OrgService,
 	}
-
 	g := c.R.Group(c.BaseURL)
 
-	if gin.Mode() != gin.TestMode {
+	if gin.Mode() == gin.TestMode {
 		g.Use(middleware.Timeout(c.TimeoutDuration, apperrors.NewServiceUnavailable()))
-		g.GET("/me", middleware.AuthUser(h.TokenService), h.Me)
-		g.POST("/signout", middleware.AuthUser(h.TokenService), h.Signout)
+		g.GET("/", middleware.AuthUser(h.TokenService), h.Orgs)
+		g.GET("/:org_id", middleware.AuthUser(h.TokenService), h.Org)
+		g.POST("/", middleware.AuthUser(h.TokenService), h.Create)
+		g.PUT("/:org_id", middleware.AuthUser(h.TokenService), h.Update)
+		g.DELETE("/:org_id", middleware.AuthUser(h.TokenService), h.Delete)
 	} else {
-		g.GET("/me", h.Me)
-		g.POST("/signout", h.Signout)
+		g.GET("/", h.Orgs)
+		g.GET("/:org_id", h.Org)
+		g.POST("/", h.Create)
+		g.PUT("/:org_id", h.Update)
+		g.DELETE("/:org_id", h.Delete)
 	}
 
-	g.POST("/signup", h.Signup)
-	g.POST("/signin", h.Signin)
-	g.POST("/tokens", h.Tokens)
 }

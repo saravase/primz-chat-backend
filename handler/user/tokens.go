@@ -1,4 +1,4 @@
-package auth
+package user
 
 import (
 	"log"
@@ -11,8 +11,20 @@ import (
 
 type tokensReq struct {
 	RefreshToken string `json:"refreshToken" binding:"required"`
-}
+} //@name tokensReq
 
+// Tokens godoc
+// @Summary      Generate tokens pair
+// @Description  Generate idToken and refreshToken
+// @Tags         auth
+// @Accept       json
+// @Produce      json
+// @Param        message   body  tokensReq  true  "Tokens Payload"
+// @Success      200  {object}  model.TokenPair
+// @Failure      500  {object}  apperrors.Error
+// @Failure      415  {object}  apperrors.Error
+// @Failure      400  {object}  apperrors.Error
+// @Router       /api/auth/tokens [post]
 func (h *Handler) Tokens(c *gin.Context) {
 	var req tokensReq
 
@@ -51,7 +63,5 @@ func (h *Handler) Tokens(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"tokens": tokens,
-	})
+	c.JSON(http.StatusOK, tokens)
 }

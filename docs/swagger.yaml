@@ -1,0 +1,552 @@
+basePath: /
+definitions:
+  CreateResponse:
+    properties:
+      is_created:
+        type: boolean
+    type: object
+  DeleteResponse:
+    properties:
+      is_deleted:
+        type: boolean
+    type: object
+  Error:
+    properties:
+      message:
+        type: string
+      type:
+        type: string
+    type: object
+  OrgCreateReq:
+    properties:
+      avatar_url:
+        type: string
+      departments:
+        items:
+          $ref: '#/definitions/org.Department'
+        type: array
+      email:
+        type: string
+      name:
+        maxLength: 100
+        minLength: 2
+        type: string
+      website:
+        type: string
+    required:
+    - email
+    - name
+    type: object
+  OrgUpdateReq:
+    properties:
+      avatar_url:
+        type: string
+      email:
+        type: string
+      name:
+        maxLength: 100
+        minLength: 2
+        type: string
+      website:
+        type: string
+    type: object
+  TokenPair:
+    properties:
+      idToken:
+        type: string
+      refreshToken:
+        type: string
+    type: object
+  UpdateResponse:
+    properties:
+      is_updated:
+        type: boolean
+    type: object
+  User:
+    properties:
+      active_status:
+        type: boolean
+      avatar_url:
+        type: string
+      dept_id:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      group_id:
+        type: string
+      last_name:
+        type: string
+      org_id:
+        type: string
+      priv_channel_ids:
+        items:
+          type: string
+        type: array
+      pub_channel_ids:
+        items: {}
+        type: array
+      role:
+        type: string
+      user_id:
+        type: string
+    required:
+    - email
+    - first_name
+    - last_name
+    type: object
+  model.Department:
+    properties:
+      groups:
+        items:
+          $ref: '#/definitions/model.Group'
+        type: array
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  model.Group:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  model.Org:
+    properties:
+      avatar_url:
+        type: string
+      departments:
+        items:
+          $ref: '#/definitions/model.Department'
+        type: array
+      email:
+        type: string
+      name:
+        type: string
+      org_id:
+        type: string
+      website:
+        type: string
+    type: object
+  org.Department:
+    properties:
+      groups:
+        items:
+          $ref: '#/definitions/org.Group'
+        type: array
+      id:
+        type: string
+      name:
+        maxLength: 100
+        minLength: 2
+        type: string
+    required:
+    - name
+    type: object
+  org.Group:
+    properties:
+      id:
+        type: string
+      name:
+        maxLength: 100
+        minLength: 2
+        type: string
+    required:
+    - name
+    type: object
+  signinReq:
+    properties:
+      email:
+        type: string
+      password:
+        maxLength: 30
+        minLength: 6
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  signupReq:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      password:
+        maxLength: 30
+        minLength: 6
+        type: string
+      role:
+        type: string
+    required:
+    - email
+    - first_name
+    - last_name
+    - password
+    - role
+    type: object
+  tokensReq:
+    properties:
+      refreshToken:
+        type: string
+    required:
+    - refreshToken
+    type: object
+host: localhost:5000
+info:
+  contact:
+    email: saravanakumar323py@gmail.com
+    name: Saravanakumar Selvam
+    url: http://www.swagger.io/support
+  description: This is chat application server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Primz Chat
+  version: "1.0"
+paths:
+  /api/auth/me:
+    get:
+      description: get user detail based on user id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - ApiKeyAuth: []
+      summary: Show user detail
+      tags:
+      - auth
+  /api/auth/signin:
+    post:
+      consumes:
+      - application/json
+      description: signin chat application
+      parameters:
+      - description: Signin Payload
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/signinReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/TokenPair'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Error'
+        "415":
+          description: Unsupported Media Type
+          schema:
+            $ref: '#/definitions/Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+      summary: signin chat application
+      tags:
+      - auth
+  /api/auth/signout:
+    post:
+      description: signout chat application
+      responses:
+        "200":
+          description: user signed out successfully!
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - ApiKeyAuth: []
+      summary: signout chat application
+      tags:
+      - auth
+  /api/auth/signup:
+    post:
+      consumes:
+      - application/json
+      description: signup chat application
+      parameters:
+      - description: Signup Payload
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/signupReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/TokenPair'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Error'
+        "415":
+          description: Unsupported Media Type
+          schema:
+            $ref: '#/definitions/Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+      summary: signup chat application
+      tags:
+      - auth
+  /api/auth/tokens:
+    post:
+      consumes:
+      - application/json
+      description: Generate idToken and refreshToken
+      parameters:
+      - description: Tokens Payload
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/tokensReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/TokenPair'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        "415":
+          description: Unsupported Media Type
+          schema:
+            $ref: '#/definitions/Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+      summary: Generate tokens pair
+      tags:
+      - auth
+  /api/orgs/:
+    get:
+      description: Get all organization details
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Org'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - ApiKeyAuth: []
+      summary: get all organization details
+      tags:
+      - orgs
+    post:
+      consumes:
+      - application/json
+      description: Create new organization
+      parameters:
+      - description: Organization Detail
+        in: body
+        name: org
+        required: true
+        schema:
+          $ref: '#/definitions/OrgCreateReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/CreateResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/Error'
+        "415":
+          description: Unsupported Media Type
+          schema:
+            $ref: '#/definitions/Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - ApiKeyAuth: []
+      summary: create new organization
+      tags:
+      - orgs
+  /api/orgs/{org_id}:
+    delete:
+      description: Delete organization detail based on org id
+      parameters:
+      - description: Org ID
+        in: path
+        name: org_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/DeleteResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - ApiKeyAuth: []
+      summary: delete organization detail based on org id
+      tags:
+      - orgs
+    get:
+      description: Get organization detail based on org id
+      parameters:
+      - description: Org ID
+        in: path
+        name: org_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Org'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - ApiKeyAuth: []
+      summary: get organization detail based on org id
+      tags:
+      - orgs
+    put:
+      consumes:
+      - application/json
+      description: Update organization detail based on org id
+      parameters:
+      - description: Org ID
+        in: path
+        name: org_id
+        required: true
+        type: string
+      - description: Organization Detail
+        in: body
+        name: org
+        required: true
+        schema:
+          $ref: '#/definitions/OrgUpdateReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/UpdateResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Error'
+        "415":
+          description: Unsupported Media Type
+          schema:
+            $ref: '#/definitions/Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - ApiKeyAuth: []
+      summary: update organization detail based on org id
+      tags:
+      - orgs
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

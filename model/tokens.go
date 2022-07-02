@@ -25,4 +25,4 @@ type IDToken struct {
 type TokenPair struct {
 	IDToken
 	RefreshToken
-}
+} // @name TokenPair

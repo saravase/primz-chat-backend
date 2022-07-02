@@ -1,4 +1,4 @@
-package auth
+package user
 
 import (
 	"log"
@@ -13,8 +13,21 @@ import (
 type signinReq struct {
 	Email    string `json:"email" binding:"required,email"`
 	Password string `json:"password" binding:"required,gte=6,lte=30"`
-}
+} //@name signinReq
 
+// Signin godoc
+// @Summary      signin chat application
+// @Description  signin chat application
+// @Tags         auth
+// @Accept       json
+// @Produce      json
+// @Param        message body signinReq true "Signin Payload"
+// @Success      200  {object}  model.TokenPair
+// @Failure      500  {object}  apperrors.Error
+// @Failure      415  {object}  apperrors.Error
+// @Failure      400  {object}  apperrors.Error
+// @Failure      404  {object}  apperrors.Error
+// @Router       /api/auth/signin [post]
 func (h *Handler) Signin(c *gin.Context) {
 	var req signinReq
 
@@ -49,7 +62,5 @@ func (h *Handler) Signin(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"tokens": tokens,
-	})
+	c.JSON(http.StatusOK, tokens)
 }

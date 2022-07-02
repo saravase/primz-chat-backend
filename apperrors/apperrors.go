@@ -22,7 +22,7 @@ const (
 type Error struct {
 	Type    Type   `json:"type"`
 	Message string `json:"message"`
-}
+} // @name Error
 
 func (e *Error) Error() string {
 	return e.Message

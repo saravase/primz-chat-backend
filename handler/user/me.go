@@ -1,4 +1,4 @@
-package auth
+package user
 
 import (
 	"log"
@@ -9,6 +9,17 @@ import (
 	"github.com/saravase/primz-chat-backend/model"
 )
 
+// Me godoc
+// @Summary      Show user detail
+// @Description  get user detail based on user id
+// @Tags         auth
+// @Produce      json
+// @Security ApiKeyAuth
+// @Success      200  {object}  model.User
+// @Failure      400  {object}  apperrors.Error
+// @Failure      404  {object}  apperrors.Error
+// @Failure      500  {object}  apperrors.Error
+// @Router       /api/auth/me [get]
 func (h *Handler) Me(c *gin.Context) {
 	user, exists := c.Get("user")
 
@@ -37,7 +48,5 @@ func (h *Handler) Me(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"user": u,
-	})
+	c.JSON(http.StatusOK, u)
 }

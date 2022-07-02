@@ -1,0 +1,50 @@
+{
+    "name" : "Infoview Technology Private Limited",
+    "email" : "admin@ivtlinfoview.com",
+    "website" : "https://www.ivtlinfoview.com",
+    "avatar_url": "",
+    "departments" : [
+        {
+            "name":"AC",
+            "groups": [
+                {
+                    "name": "Group 1"
+                },
+                {
+                    "name": "Group 2"
+                },
+                {
+                    "name": "Group 3"
+                }
+            ]
+        },
+        {
+            "name":"HR",
+            "groups": [
+                {
+                    "name": "Group 1"
+                },
+                {
+                    "name": "Group 2"
+                },
+                {
+                    "name": "Group 3"
+                }
+            ]
+        },
+        {
+            "name":"SCM",
+            "groups": [
+                {
+                    "name": "Group 1"
+                },
+                {
+                    "name": "Group 2"
+                },
+                {
+                    "name": "Group 3"
+                }
+            ]
+        }
+    ]
+}

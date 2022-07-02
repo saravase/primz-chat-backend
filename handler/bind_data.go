@@ -22,13 +22,20 @@ func BindData(c *gin.Context, req interface{}) bool {
 
 		err := apperrors.NewUnsupportedMediaType(msg)
 
+		c.JSON(err.Status(), err)
+		return false
+	}
+
+	if err := c.BindJSON(req); err != nil {
+		err := apperrors.NewBadRequest("Invalid request parameters.")
 		c.JSON(err.Status(), gin.H{
 			"error": err,
 		})
 		return false
 	}
 
-	if err := c.ShouldBind(req); err != nil {
+	v := validator.New()
+	if err := v.Struct(req); err != nil {
 		log.Printf("Error binding data: %+v\n", err)
 
 		if errs, ok := err.(validator.ValidationErrors); ok {

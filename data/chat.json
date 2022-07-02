@@ -1,0 +1,60 @@
+{
+    "user_id" : "6Dfs3F",
+    "first_name" : "Navanitha",
+    "last_name" : "Saravanakumar",
+    "email" : "navanitha@gmail.com",
+    "role" : "Software Manager",
+    "info": {
+        "org_id" : "O7jhG9",
+        "dept_id" : "D67Tjh",
+        "group_id" : "Gg7jR5",
+        "priv_channel_ids" : ["4FdfD4"],
+        "pub_channel_ids" : [],
+        "active_status" : true,
+        "access_role" : "manager"
+    },
+    "priv_chennal_list": [
+        {
+            "id" : "4FdfD4",
+            "user_ids" : ["6Dfs3F", "4Dfs3F"],
+            "name" : "",
+            "group_channel" : false,
+            "message_ids" : [
+                "73fFfG",
+                "Fdg4Gd",
+                "D4Dgg"
+            ],
+            "messages": [
+                {
+                    "id" : "73fFfG",
+                    "user_id": "6Dfs3F",
+                    "text_content": "Hi",
+                    "attachment_url":"",
+                    "seen_user_ids":["4Dfs3F"]
+                }
+            ]
+        }
+    ],
+    "pub_channel_list": [
+        {
+            "id" : "4FdfD4",
+            "user_ids" : ["6Dfs3F", "4Dfs3F"],
+            "name" : "",
+            "group_channel" : false,
+            "message_ids" : [
+                "73fFfG",
+                "Fdg4Gd",
+                "D4Dgg"
+            ],
+            "messages": [
+                {
+                    "id" : "73fFfG",
+                    "user_id": "6Dfs3F",
+                    "text_content": "Hi",
+                    "attachment_url":"",
+                    "seen_user_ids":["4Dfs3F"]
+                }
+            ]
+        }
+    ]
+}

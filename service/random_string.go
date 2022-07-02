@@ -22,3 +22,7 @@ func StringWithCharset(length int, charset string) string {
 func UserID() string {
 	return StringWithCharset(8, charset)
 }
+
+func RandomID() string {
+	return StringWithCharset(8, charset)
+}

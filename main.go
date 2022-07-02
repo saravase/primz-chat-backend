@@ -25,6 +25,25 @@ func init() {
 	flag.Parse()
 }
 
+// @title           Primz Chat
+// @version         1.0
+// @description     This is chat application server.
+// @termsOfService  http://swagger.io/terms/
+
+// @contact.name   Saravanakumar Selvam
+// @contact.url    http://www.swagger.io/support
+// @contact.email  saravanakumar323py@gmail.com
+
+// @license.name  Apache 2.0
+// @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
+// @tokenUrl https://example.com/oauth/token
+
+// @host      localhost:5000
+// @BasePath  /
 func main() {
 	if local {
 		err := godotenv.Load()
