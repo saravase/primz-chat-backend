@@ -1,4 +1,4 @@
-package org
+package user
 
 import (
 	"log"
@@ -11,44 +11,44 @@ import (
 )
 
 // Update godoc
-// @Summary      update organization detail based on org id
-// @Description  Update organization detail based on org id
-// @Tags         orgs
+// @Summary      update user detail based on user id
+// @Description  Update user detail based on user id
+// @Tags         auth
 // @Accept      json
 // @Produce      json
 // @Security ApiKeyAuth
-// @Param        org_id   path     string  true  "Org ID"
-// @Param org body OrgUpdateReq true "Organization Detail"
+// @Param        user_id   path     string  true  "User ID"
+// @Param user body UserUpdateReq true "User Detail"
 // @Success      200  {object}  handler.UpdateResponse
 // @Failure      415  {object}  apperrors.Error
 // @Failure      400  {object}  apperrors.Error
 // @Failure      404  {object}  apperrors.Error
 // @Failure      500  {object}  apperrors.Error
-// @Router       /api/orgs/{org_id} [put]
+// @Router       /api/auth/user/{user_id} [put]
 func (h *Handler) Update(c *gin.Context) {
 	var (
-		req OrgUpdateReq
+		req UserUpdateReq
 	)
 
-	id := c.Param("org_id")
+	id := c.Param("user_id")
 	if ok := handler.BindData(c, &req); !ok {
 		return
 	}
 
 	ctx := c.Request.Context()
-	org, err := h.OrgService.Get(ctx, id)
+	user, err := h.UserService.Get(ctx, id)
 	if err != nil {
-		log.Printf("Failed to get organization: %v\n", err.Error())
+		log.Printf("Failed to get user: %v\n", err.Error())
 		c.JSON(apperrors.Status(err), gin.H{
 			"error": err,
 		})
 		return
 	}
-	copier.CopyWithOption(org, &req, copier.Option{IgnoreEmpty: true})
+	copier.CopyWithOption(user, &req, copier.Option{IgnoreEmpty: true})
 
-	err = h.OrgService.Update(ctx, id, org)
+	err = h.UserService.Update(ctx, id, user)
 	if err != nil {
-		log.Printf("Failed to update organization: %v\n", err.Error())
+		log.Printf("Failed to update user: %v\n", err.Error())
 		c.JSON(apperrors.Status(err), gin.H{
 			"error": err,
 		})

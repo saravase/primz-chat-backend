@@ -27,8 +27,25 @@ func (r *mongoChannelRepository) FindByID(ctx context.Context, id string) (chann
 	return
 }
 
-func (r *mongoChannelRepository) FindByUserID(ctx context.Context, id string) ([]*model.Channel, error) {
-	return nil, nil
+func (r *mongoChannelRepository) FindByUsers(ctx context.Context, users *[]model.ChannelUser) (channel *model.Channel, err error) {
+	filter := bson.D{{"users", users}}
+	err = r.collection.FindOne(ctx, filter).Decode(&channel)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func (r *mongoChannelRepository) FindByUserIDs(ctx context.Context, ids []string) (channels []*model.Channel, err error) {
+	filter := bson.D{{"channel_id", bson.D{{"$in", ids}}}}
+	cursor, err := r.collection.Find(ctx, filter)
+	if err != nil {
+		return
+	}
+	if err = cursor.All(ctx, &channels); err != nil {
+		return
+	}
+	return
 }
 
 func (r *mongoChannelRepository) Create(ctx context.Context, channel *model.Channel) error {

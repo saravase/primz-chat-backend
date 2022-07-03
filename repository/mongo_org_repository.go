@@ -53,7 +53,6 @@ func (r *mongoOrgRepository) Update(ctx context.Context, id string, org *model.O
 	if err != nil {
 		return err
 	}
-
 	return nil
 }
 

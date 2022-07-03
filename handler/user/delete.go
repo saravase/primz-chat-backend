@@ -1,4 +1,4 @@
-package org
+package user
 
 import (
 	"log"
@@ -10,32 +10,32 @@ import (
 )
 
 // Delete godoc
-// @Summary      delete organization detail based on org id
-// @Description  Delete organization detail based on org id
-// @Tags         orgs
+// @Summary      delete user detail based on user id
+// @Description  Delete user detail based on user id
+// @Tags         auth
 // @Produce      json
 // @Security ApiKeyAuth
-// @Param        org_id   path     string  true  "Org ID"
+// @Param        user_id   path     string  true  "User ID"
 // @Success      200  {object}  handler.DeleteResponse
 // @Failure      400  {object}  apperrors.Error
 // @Failure      404  {object}  apperrors.Error
 // @Failure      500  {object}  apperrors.Error
-// @Router       /api/org/{org_id} [delete]
+// @Router       /api/auth/user/{user_id} [delete]
 func (h *Handler) Delete(c *gin.Context) {
-	id := c.Param("org_id")
+	id := c.Param("user_id")
 	ctx := c.Request.Context()
-	_, err := h.OrgService.Get(ctx, id)
+	_, err := h.UserService.Get(ctx, id)
 	if err != nil {
-		log.Printf("Failed to get organization: %v\n", err.Error())
+		log.Printf("Failed to get user: %v\n", err.Error())
 		c.JSON(apperrors.Status(err), gin.H{
 			"error": err,
 		})
 		return
 	}
 
-	err = h.OrgService.Delete(ctx, id)
+	err = h.UserService.Delete(ctx, id)
 	if err != nil {
-		log.Printf("Failed to delete organization: %v\n", err.Error())
+		log.Printf("Failed to delete user: %v\n", err.Error())
 		c.JSON(apperrors.Status(err), gin.H{
 			"error": err,
 		})

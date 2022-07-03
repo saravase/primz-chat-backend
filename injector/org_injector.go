@@ -12,6 +12,7 @@ func (i *Injector) OrgInjector() {
 	baseURL := i.Cfg.OrgBaseURL()
 	handlerTimeout := i.Cfg.HandlerTimeout()
 	orgRepository := repository.NewOrgRepository(i.DB)
+	i.OrgRepository = orgRepository
 	orgService := service.NewOrgService(&service.OrgConfig{
 		OrgRepository: orgRepository,
 	})

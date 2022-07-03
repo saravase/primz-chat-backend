@@ -60,14 +60,31 @@ func (r *mongoUserRepository) FindByEmail(ctx context.Context, email string) (*m
 	return user, nil
 }
 
-func (r *mongoUserRepository) Find(ctx context.Context) ([]*model.User, error) {
-	return nil, nil
+func (r *mongoUserRepository) Find(ctx context.Context) (users []*model.User, err error) {
+	cursor, err := r.collection.Find(ctx, bson.M{})
+	if err != nil {
+		return
+	}
+	if err = cursor.All(ctx, &users); err != nil {
+		return
+	}
+	return
 }
 
 func (r *mongoUserRepository) Update(ctx context.Context, id string, user *model.User) error {
+	filter := bson.D{{"user_id", id}}
+	_, err := r.collection.ReplaceOne(ctx, filter, user)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
 func (r *mongoUserRepository) Delete(ctx context.Context, id string) error {
+	filter := bson.D{{"user_id", id}}
+	_, err := r.collection.DeleteOne(ctx, filter)
+	if err != nil {
+		return err
+	}
 	return nil
 }

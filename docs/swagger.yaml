@@ -1,5 +1,38 @@
 basePath: /
 definitions:
+  ChannelCreateReq:
+    properties:
+      channel_owner:
+        $ref: '#/definitions/channel.ChannelUser'
+      group_channel:
+        type: boolean
+      name:
+        maxLength: 100
+        minLength: 2
+        type: string
+      users:
+        items:
+          $ref: '#/definitions/channel.ChannelUser'
+        type: array
+    required:
+    - channel_owner
+    - group_channel
+    - users
+    type: object
+  ChannelIDs:
+    properties:
+      channel_ids:
+        items:
+          type: string
+        type: array
+    type: object
+  ChannelUpdateReq:
+    properties:
+      name:
+        maxLength: 100
+        minLength: 2
+        type: string
+    type: object
   CreateResponse:
     properties:
       is_created:
@@ -15,6 +48,32 @@ definitions:
       message:
         type: string
       type:
+        type: string
+    type: object
+  MessageCreateReq:
+    properties:
+      attachment_url:
+        type: string
+      channel_id:
+        type: string
+      seen_user_ids:
+        items:
+          type: string
+        type: array
+      text_content:
+        type: string
+      user_id:
+        type: string
+    required:
+    - channel_id
+    - text_content
+    - user_id
+    type: object
+  MessageUpdateReq:
+    properties:
+      attachment_url:
+        type: string
+      text_content:
         type: string
     type: object
   OrgCreateReq:
@@ -96,6 +155,53 @@ definitions:
     - first_name
     - last_name
     type: object
+  UserUpdateReq:
+    properties:
+      email:
+        type: string
+      first_name:
+        maxLength: 100
+        minLength: 2
+        type: string
+      last_name:
+        maxLength: 100
+        minLength: 2
+        type: string
+      role:
+        type: string
+    type: object
+  channel.ChannelUser:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+    required:
+    - id
+    - name
+    type: object
+  model.Channel:
+    properties:
+      channel_id:
+        type: string
+      channel_owner:
+        $ref: '#/definitions/model.ChannelUser'
+      group_channel:
+        type: boolean
+      name:
+        type: string
+      users:
+        items:
+          $ref: '#/definitions/model.ChannelUser'
+        type: array
+    type: object
+  model.ChannelUser:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+    type: object
   model.Department:
     properties:
       groups:
@@ -112,6 +218,23 @@ definitions:
       id:
         type: string
       name:
+        type: string
+    type: object
+  model.Message:
+    properties:
+      attachment_url:
+        type: string
+      channel_id:
+        type: string
+      msg_id:
+        type: string
+      seen_user_ids:
+        items:
+          type: string
+        type: array
+      text_content:
+        type: string
+      user_id:
         type: string
     type: object
   model.Org:
@@ -174,8 +297,12 @@ definitions:
       email:
         type: string
       first_name:
+        maxLength: 100
+        minLength: 2
         type: string
       last_name:
+        maxLength: 100
+        minLength: 2
         type: string
       password:
         maxLength: 30
@@ -369,9 +496,86 @@ paths:
       summary: Generate tokens pair
       tags:
       - auth
-  /api/orgs/:
+  /api/auth/user/{user_id}:
+    delete:
+      description: Delete user detail based on user id
+      parameters:
+      - description: User ID
+        in: path
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/DeleteResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - ApiKeyAuth: []
+      summary: delete user detail based on user id
+      tags:
+      - auth
+    put:
+      consumes:
+      - application/json
+      description: Update user detail based on user id
+      parameters:
+      - description: User ID
+        in: path
+        name: user_id
+        required: true
+        type: string
+      - description: User Detail
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/UserUpdateReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/UpdateResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Error'
+        "415":
+          description: Unsupported Media Type
+          schema:
+            $ref: '#/definitions/Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - ApiKeyAuth: []
+      summary: update user detail based on user id
+      tags:
+      - auth
+  /api/auth/users:
     get:
-      description: Get all organization details
+      description: Get all user details
       produces:
       - application/json
       responses:
@@ -379,7 +583,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/model.Org'
+              $ref: '#/definitions/User'
             type: array
         "500":
           description: Internal Server Error
@@ -387,9 +591,363 @@ paths:
             $ref: '#/definitions/Error'
       security:
       - ApiKeyAuth: []
-      summary: get all organization details
+      summary: get all user details
       tags:
-      - orgs
+      - auth
+  /api/channel/:
+    post:
+      consumes:
+      - application/json
+      description: Create new channel
+      parameters:
+      - description: Channel Detail
+        in: body
+        name: channel
+        required: true
+        schema:
+          $ref: '#/definitions/ChannelCreateReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/CreateResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/Error'
+        "415":
+          description: Unsupported Media Type
+          schema:
+            $ref: '#/definitions/Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - ApiKeyAuth: []
+      summary: create new channel
+      tags:
+      - channel
+  /api/channel/{channel_id}:
+    delete:
+      description: Delete channel detail based on channel id
+      parameters:
+      - description: Channel ID
+        in: path
+        name: channel_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/DeleteResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - ApiKeyAuth: []
+      summary: delete channel detail based on channel id
+      tags:
+      - channel
+    get:
+      description: Get channel detail based on channel id
+      parameters:
+      - description: Channel ID
+        in: path
+        name: channel_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Channel'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - ApiKeyAuth: []
+      summary: get channel detail based on channel id
+      tags:
+      - channel
+    put:
+      consumes:
+      - application/json
+      description: Update channel detail based on channel id
+      parameters:
+      - description: Channel ID
+        in: path
+        name: channel_id
+        required: true
+        type: string
+      - description: Channel Detail
+        in: body
+        name: channel
+        required: true
+        schema:
+          $ref: '#/definitions/ChannelUpdateReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/UpdateResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Error'
+        "415":
+          description: Unsupported Media Type
+          schema:
+            $ref: '#/definitions/Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - ApiKeyAuth: []
+      summary: update channel detail based on channel id
+      tags:
+      - channel
+  /api/channels:
+    post:
+      description: Get channels details based on channel id's
+      parameters:
+      - description: Channel ID's
+        in: body
+        name: channel_id's
+        required: true
+        schema:
+          $ref: '#/definitions/ChannelIDs'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Channel'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - ApiKeyAuth: []
+      summary: get channels details based on channel id's
+      tags:
+      - channel
+  /api/message/:
+    post:
+      consumes:
+      - application/json
+      description: Create new message
+      parameters:
+      - description: Message Detail
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/MessageCreateReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/CreateResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/Error'
+        "415":
+          description: Unsupported Media Type
+          schema:
+            $ref: '#/definitions/Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - ApiKeyAuth: []
+      summary: create new message
+      tags:
+      - message
+  /api/message/{msg_id}:
+    delete:
+      description: Delete message detail based on msg id
+      parameters:
+      - description: Message ID
+        in: path
+        name: msg_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/DeleteResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - ApiKeyAuth: []
+      summary: delete message detail based on msg id
+      tags:
+      - message
+    get:
+      description: Get message detail based on message id
+      parameters:
+      - description: Message ID
+        in: path
+        name: msg_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Message'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - ApiKeyAuth: []
+      summary: get message detail based on message id
+      tags:
+      - message
+    put:
+      consumes:
+      - application/json
+      description: Update message detail based on message id
+      parameters:
+      - description: Message ID
+        in: path
+        name: msg_id
+        required: true
+        type: string
+      - description: Message Detail
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/MessageUpdateReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/UpdateResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Error'
+        "415":
+          description: Unsupported Media Type
+          schema:
+            $ref: '#/definitions/Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - ApiKeyAuth: []
+      summary: update message detail based on message id
+      tags:
+      - message
+  /api/messages/{channel_id}:
+    get:
+      description: Get messages based on channel id
+      parameters:
+      - description: Channel ID
+        in: path
+        name: channel_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Channel'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - ApiKeyAuth: []
+      summary: get messages based on channel id
+      tags:
+      - message
+  /api/org/:
     post:
       consumes:
       - application/json
@@ -407,9 +965,7 @@ paths:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/CreateResponse'
-            type: array
+            $ref: '#/definitions/CreateResponse'
         "400":
           description: Bad Request
           schema:
@@ -431,7 +987,7 @@ paths:
       summary: create new organization
       tags:
       - orgs
-  /api/orgs/{org_id}:
+  /api/org/{org_id}:
     delete:
       description: Delete organization detail based on org id
       parameters:
@@ -446,9 +1002,7 @@ paths:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/DeleteResponse'
-            type: array
+            $ref: '#/definitions/DeleteResponse'
         "400":
           description: Bad Request
           schema:
@@ -498,6 +1052,28 @@ paths:
       summary: get organization detail based on org id
       tags:
       - orgs
+  /api/orgs:
+    get:
+      description: Get all organization details
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Org'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - ApiKeyAuth: []
+      summary: get all organization details
+      tags:
+      - orgs
+  /api/orgs/{org_id}:
     put:
       consumes:
       - application/json
@@ -520,9 +1096,7 @@ paths:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/UpdateResponse'
-            type: array
+            $ref: '#/definitions/UpdateResponse'
         "400":
           description: Bad Request
           schema:

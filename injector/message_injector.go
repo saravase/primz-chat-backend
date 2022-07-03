@@ -9,9 +9,10 @@ import (
 )
 
 func (i *Injector) MessageInjector() {
-	baseURL := i.Cfg.OrgBaseURL()
+	baseURL := i.Cfg.MessageBaseURL()
 	handlerTimeout := i.Cfg.HandlerTimeout()
 	messageRepository := repository.NewMessageRepository(i.DB)
+	i.MessageRepository = messageRepository
 	messageService := service.NewMessageService(&service.MessageConfig{
 		MessageRepository: messageRepository,
 	})

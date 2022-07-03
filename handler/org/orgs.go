@@ -16,7 +16,7 @@ import (
 // @Security ApiKeyAuth
 // @Success      200  {object}  []model.Org
 // @Failure      500  {object}  apperrors.Error
-// @Router       /api/orgs/ [get]
+// @Router       /api/orgs [get]
 func (h *Handler) Orgs(c *gin.Context) {
 	ctx := c.Request.Context()
 	orgs, err := h.OrgService.GetOrgs(ctx)

@@ -26,7 +26,7 @@ type Config struct {
 
 func NewHandler(c *Config) {
 
-	_ = &Handler{
+	h := &Handler{
 		UserService:    c.UserService,
 		TokenService:   c.TokenService,
 		MessageService: c.MessageService,
@@ -35,8 +35,16 @@ func NewHandler(c *Config) {
 
 	if gin.Mode() == gin.TestMode {
 		g.Use(middleware.Timeout(c.TimeoutDuration, apperrors.NewServiceUnavailable()))
-
+		c.R.GET("/api/messages/:channel_id", middleware.AuthUser(h.TokenService), h.Messages)
+		g.GET("/:msg_id", middleware.AuthUser(h.TokenService), h.Message)
+		g.POST("/", middleware.AuthUser(h.TokenService), h.Create)
+		g.PUT("/:msg_id", middleware.AuthUser(h.TokenService), h.Update)
+		g.DELETE("/:msg_id", middleware.AuthUser(h.TokenService), h.Delete)
 	} else {
-
+		c.R.GET("/api/messages/:channel_id", h.Messages)
+		g.GET("/:msg_id", h.Message)
+		g.POST("/", h.Create)
+		g.PUT("/:msg_id", h.Update)
+		g.DELETE("/:msg_id", h.Delete)
 	}
 }

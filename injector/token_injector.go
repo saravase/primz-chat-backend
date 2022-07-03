@@ -11,6 +11,7 @@ import (
 
 func (i *Injector) TokenInjector() error {
 	tokenRepository := repository.NewTokenRepository(i.DB)
+	i.TokenRepository = tokenRepository
 	privKeyFile := i.Cfg.PrivKeyFile()
 	priv, err := ioutil.ReadFile(privKeyFile)
 

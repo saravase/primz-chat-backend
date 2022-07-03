@@ -35,13 +35,13 @@ func NewHandler(c *Config) {
 
 	if gin.Mode() == gin.TestMode {
 		g.Use(middleware.Timeout(c.TimeoutDuration, apperrors.NewServiceUnavailable()))
-		g.GET("/", middleware.AuthUser(h.TokenService), h.Orgs)
+		c.R.GET("/api/orgs", middleware.AuthUser(h.TokenService), h.Orgs)
 		g.GET("/:org_id", middleware.AuthUser(h.TokenService), h.Org)
 		g.POST("/", middleware.AuthUser(h.TokenService), h.Create)
 		g.PUT("/:org_id", middleware.AuthUser(h.TokenService), h.Update)
 		g.DELETE("/:org_id", middleware.AuthUser(h.TokenService), h.Delete)
 	} else {
-		g.GET("/", h.Orgs)
+		c.R.GET("/api/args", h.Orgs)
 		g.GET("/:org_id", h.Org)
 		g.POST("/", h.Create)
 		g.PUT("/:org_id", h.Update)

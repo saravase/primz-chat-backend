@@ -12,6 +12,7 @@ func (i *Injector) UserInjector() {
 	baseURL := i.Cfg.AuthBaseURL()
 	handlerTimeout := i.Cfg.HandlerTimeout()
 	userRepository := repository.NewUserRepository(i.DB)
+	i.UserRepository = userRepository
 	userService := service.NewUserService(&service.USConfig{
 		UserRepository: userRepository,
 	})

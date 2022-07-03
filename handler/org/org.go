@@ -19,7 +19,7 @@ import (
 // @Failure      400  {object}  apperrors.Error
 // @Failure      404  {object}  apperrors.Error
 // @Failure      500  {object}  apperrors.Error
-// @Router       /api/orgs/{org_id} [get]
+// @Router       /api/org/{org_id} [get]
 func (h *Handler) Org(c *gin.Context) {
 	id := c.Param("org_id")
 	ctx := c.Request.Context()

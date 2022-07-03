@@ -9,9 +9,10 @@ import (
 )
 
 func (i *Injector) ChannelInjector() {
-	baseURL := i.Cfg.OrgBaseURL()
+	baseURL := i.Cfg.ChannelBaseURL()
 	handlerTimeout := i.Cfg.HandlerTimeout()
 	channelRepository := repository.NewChannelRepository(i.DB)
+	i.ChennelRepository = channelRepository
 	channelService := service.NewChannelService(&service.ChannelConfig{
 		ChannelRepository: channelRepository,
 	})

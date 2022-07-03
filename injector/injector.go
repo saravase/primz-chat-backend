@@ -8,32 +8,32 @@ import (
 )
 
 type Injector struct {
-	Cfg            config.Config
-	DB             *mongo.Database
-	Engine         *gin.Engine
-	UserService    model.UserService
-	TokenService   model.TokenService
-	OrgService     model.OrgService
-	ChannelService model.ChannelService
-	MessageService model.MessageService
+	Cfg               config.Config
+	DB                *mongo.Database
+	Engine            *gin.Engine
+	UserService       model.UserService
+	TokenService      model.TokenService
+	OrgService        model.OrgService
+	ChannelService    model.ChannelService
+	MessageService    model.MessageService
+	ChatService       model.ChatService
+	UserRepository    model.UserRepository
+	TokenRepository   model.TokenRepository
+	OrgRepository     model.OrgRepository
+	ChennelRepository model.ChennelRepository
+	MessageRepository model.MessageRepository
 }
 
 type InjectorConfig struct {
-	Cfg          config.Config
-	DB           *mongo.Database
-	Engine       *gin.Engine
-	UserService  model.UserService
-	TokenService model.TokenService
-	OrgService   model.OrgService
+	Cfg    config.Config
+	DB     *mongo.Database
+	Engine *gin.Engine
 }
 
 func NewInjector(c *InjectorConfig) *Injector {
 	return &Injector{
-		Cfg:          c.Cfg,
-		DB:           c.DB,
-		Engine:       c.Engine,
-		UserService:  c.UserService,
-		TokenService: c.TokenService,
-		OrgService:   c.OrgService,
+		Cfg:    c.Cfg,
+		DB:     c.DB,
+		Engine: c.Engine,
 	}
 }

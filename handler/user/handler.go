@@ -31,13 +31,19 @@ func NewHandler(c *Config) {
 
 	g := c.R.Group(c.BaseURL)
 
-	if gin.Mode() != gin.TestMode {
+	if gin.Mode() == gin.TestMode {
 		g.Use(middleware.Timeout(c.TimeoutDuration, apperrors.NewServiceUnavailable()))
 		g.GET("/me", middleware.AuthUser(h.TokenService), h.Me)
 		g.POST("/signout", middleware.AuthUser(h.TokenService), h.Signout)
+		g.PUT("/user/:user_id", middleware.AuthUser(h.TokenService), h.Update)
+		g.DELETE("/user/:user_id", middleware.AuthUser(h.TokenService), h.Delete)
+		g.GET("/users", middleware.AuthUser(h.TokenService), h.Users)
 	} else {
 		g.GET("/me", h.Me)
 		g.POST("/signout", h.Signout)
+		g.PUT("/user/:user_id", h.Update)
+		g.DELETE("/user/:user_id", h.Delete)
+		g.GET("/users", h.Users)
 	}
 
 	g.POST("/signup", h.Signup)

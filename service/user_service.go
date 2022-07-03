@@ -2,12 +2,14 @@ package service
 
 import (
 	"context"
+	"errors"
 	"log"
 	"time"
 
 	"github.com/saravase/primz-chat-backend/apperrors"
 	"github.com/saravase/primz-chat-backend/model"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type userService struct {
@@ -26,8 +28,13 @@ func NewUserService(c *USConfig) model.UserService {
 
 func (s *userService) Get(ctx context.Context, uid string) (*model.User, error) {
 	u, err := s.UserRepository.FindByID(ctx, uid)
-
-	return u, err
+	if err != nil && errors.Is(err, mongo.ErrNoDocuments) {
+		return nil, apperrors.NewNotFound("user_id", uid)
+	}
+	if err != nil {
+		return nil, err
+	}
+	return u, nil
 }
 
 func (s *userService) Signup(ctx context.Context, u *model.User) error {
@@ -72,13 +79,24 @@ func (s *userService) Signin(ctx context.Context, u *model.User) error {
 }
 
 func (s *userService) GetUsers(ctx context.Context) ([]*model.User, error) {
-	return nil, nil
+	users, err := s.UserRepository.Find(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return users, nil
 }
 
 func (s *userService) Update(ctx context.Context, id string, user *model.User) error {
+	user.UpdatedAt = primitive.NewDateTimeFromTime(time.Now())
+	if err := s.UserRepository.Update(ctx, id, user); err != nil {
+		return err
+	}
 	return nil
 }
 
 func (s *userService) Delete(ctx context.Context, id string) error {
+	if err := s.UserRepository.Delete(ctx, id); err != nil {
+		return err
+	}
 	return nil
 }

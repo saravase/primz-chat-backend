@@ -28,9 +28,10 @@ func inject(cfg config.Config, db *mongo.Database) (*gin.Engine, error) {
 	if err != nil {
 		return router, err
 	}
-	i.UserInjector()
 	i.OrgInjector()
 	i.ChannelInjector()
 	i.MessageInjector()
+	i.ChatInjector()
+	i.UserInjector()
 	return router, nil
 }

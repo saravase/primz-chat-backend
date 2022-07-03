@@ -16,6 +16,7 @@ type Config interface {
 	OrgBaseURL() string
 	ChannelBaseURL() string
 	MessageBaseURL() string
+	ChatBaseURL() string
 	HandlerTimeout() int64
 	IdTokenExp() int64
 	RefreshTokenExp() int64
@@ -36,6 +37,7 @@ type config struct {
 	orgBaseURL      string
 	channelBaseURL  string
 	messageBaseURL  string
+	chatBaseURL     string
 	handlerTimeout  int
 	idTokenExp      int
 	refreshSecret   string
@@ -64,6 +66,7 @@ func NewConfig() Config {
 	cfg.orgBaseURL = os.Getenv("ORG_BASE_URL")
 	cfg.channelBaseURL = os.Getenv("CHANNEL_BASE_URL")
 	cfg.messageBaseURL = os.Getenv("MESSAGE_BASE_URL")
+	cfg.chatBaseURL = os.Getenv("CHAT_BASE_URL")
 	cfg.handlerTimeout, err = strconv.Atoi(os.Getenv("HANDLER_TIMEOUT"))
 	if err != nil {
 		log.Fatalln("Error on load env var:", err.Error())
@@ -108,6 +111,10 @@ func (c *config) ChannelBaseURL() string {
 
 func (c *config) MessageBaseURL() string {
 	return c.messageBaseURL
+}
+
+func (c *config) ChatBaseURL() string {
+	return c.chatBaseURL
 }
 
 func (c *config) HandlerTimeout() int64 {

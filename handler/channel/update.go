@@ -1,4 +1,4 @@
-package org
+package channel
 
 import (
 	"log"
@@ -11,34 +11,34 @@ import (
 )
 
 // Update godoc
-// @Summary      update organization detail based on org id
-// @Description  Update organization detail based on org id
-// @Tags         orgs
+// @Summary      update channel detail based on channel id
+// @Description  Update channel detail based on channel id
+// @Tags         channel
 // @Accept      json
 // @Produce      json
 // @Security ApiKeyAuth
-// @Param        org_id   path     string  true  "Org ID"
-// @Param org body OrgUpdateReq true "Organization Detail"
+// @Param        channel_id   path     string  true  "Channel ID"
+// @Param channel body ChannelUpdateReq true "Channel Detail"
 // @Success      200  {object}  handler.UpdateResponse
 // @Failure      415  {object}  apperrors.Error
 // @Failure      400  {object}  apperrors.Error
 // @Failure      404  {object}  apperrors.Error
 // @Failure      500  {object}  apperrors.Error
-// @Router       /api/orgs/{org_id} [put]
+// @Router       /api/channel/{channel_id} [put]
 func (h *Handler) Update(c *gin.Context) {
 	var (
-		req OrgUpdateReq
+		req ChannelUpdateReq
 	)
 
-	id := c.Param("org_id")
+	id := c.Param("channel_id")
 	if ok := handler.BindData(c, &req); !ok {
 		return
 	}
 
 	ctx := c.Request.Context()
-	org, err := h.OrgService.Get(ctx, id)
+	org, err := h.ChannelService.Get(ctx, id)
 	if err != nil {
-		log.Printf("Failed to get organization: %v\n", err.Error())
+		log.Printf("Failed to get channel: %v\n", err.Error())
 		c.JSON(apperrors.Status(err), gin.H{
 			"error": err,
 		})
@@ -46,9 +46,9 @@ func (h *Handler) Update(c *gin.Context) {
 	}
 	copier.CopyWithOption(org, &req, copier.Option{IgnoreEmpty: true})
 
-	err = h.OrgService.Update(ctx, id, org)
+	err = h.ChannelService.Update(ctx, id, org)
 	if err != nil {
-		log.Printf("Failed to update organization: %v\n", err.Error())
+		log.Printf("Failed to update channel: %v\n", err.Error())
 		c.JSON(apperrors.Status(err), gin.H{
 			"error": err,
 		})

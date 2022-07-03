@@ -27,8 +27,16 @@ func (r *mongoMessageRepository) FindByID(ctx context.Context, id string) (msg *
 	return
 }
 
-func (r *mongoMessageRepository) FindByChannelID(ctx context.Context, id string) ([]*model.Message, error) {
-	return nil, nil
+func (r *mongoMessageRepository) FindByChannelID(ctx context.Context, id string) (msgs []*model.Message, err error) {
+	filter := bson.D{{"channel_id", id}}
+	cursor, err := r.collection.Find(ctx, filter)
+	if err != nil {
+		return
+	}
+	if err = cursor.All(ctx, &msgs); err != nil {
+		return
+	}
+	return
 }
 
 func (r *mongoMessageRepository) Create(ctx context.Context, msg *model.Message) error {

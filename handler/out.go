@@ -1,4 +1,4 @@
-package org
+package handler
 
 type CreateResponse struct {
 	IsCreated bool `json:"is_created"`
