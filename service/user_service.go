@@ -86,6 +86,14 @@ func (s *userService) GetUsers(ctx context.Context) ([]*model.User, error) {
 	return users, nil
 }
 
+func (s *userService) SearchUsers(ctx context.Context, queryMap map[string]string) ([]*model.User, error) {
+	users, err := s.UserRepository.Search(ctx, queryMap)
+	if err != nil {
+		return nil, err
+	}
+	return users, nil
+}
+
 func (s *userService) Update(ctx context.Context, id string, user *model.User) error {
 	user.UpdatedAt = primitive.NewDateTimeFromTime(time.Now())
 	if err := s.UserRepository.Update(ctx, id, user); err != nil {

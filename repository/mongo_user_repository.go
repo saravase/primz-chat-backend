@@ -71,6 +71,17 @@ func (r *mongoUserRepository) Find(ctx context.Context) (users []*model.User, er
 	return
 }
 
+func (r *mongoUserRepository) Search(ctx context.Context, queryMap map[string]string) (users []*model.User, err error) {
+	cursor, err := r.collection.Find(ctx, queryMap)
+	if err != nil {
+		return
+	}
+	if err = cursor.All(ctx, &users); err != nil {
+		return
+	}
+	return
+}
+
 func (r *mongoUserRepository) Update(ctx context.Context, id string, user *model.User) error {
 	filter := bson.D{{"user_id", id}}
 	_, err := r.collection.ReplaceOne(ctx, filter, user)

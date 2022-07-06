@@ -12,11 +12,13 @@ type UserService interface {
 	Signup(ctx context.Context, u *User) error
 	Signin(ctx context.Context, u *User) error
 	GetUsers(ctx context.Context) ([]*User, error)
+	SearchUsers(ctx context.Context, queryMap map[string]string) ([]*User, error)
 	Update(ctx context.Context, id string, user *User) error
 	Delete(ctx context.Context, id string) error
 }
 
 type UserRepository interface {
+	Search(ctx context.Context, queryMap map[string]string) ([]*User, error)
 	FindByID(ctx context.Context, uid string) (*User, error)
 	FindByEmail(ctx context.Context, email string) (*User, error)
 	Create(ctx context.Context, u *User) error

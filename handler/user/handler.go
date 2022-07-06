@@ -38,12 +38,14 @@ func NewHandler(c *Config) {
 		g.PUT("/user/:user_id", middleware.AuthUser(h.TokenService), h.Update)
 		g.DELETE("/user/:user_id", middleware.AuthUser(h.TokenService), h.Delete)
 		g.GET("/users", middleware.AuthUser(h.TokenService), h.Users)
+		g.GET("/users/search", middleware.AuthUser(h.TokenService), h.Search)
 	} else {
 		g.GET("/me", h.Me)
 		g.POST("/signout", h.Signout)
 		g.PUT("/user/:user_id", h.Update)
 		g.DELETE("/user/:user_id", h.Delete)
 		g.GET("/users", h.Users)
+		g.GET("/users/search", h.Search)
 	}
 
 	g.POST("/signup", h.Signup)

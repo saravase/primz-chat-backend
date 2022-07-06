@@ -424,6 +424,60 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/auth/users/search": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get users detail based on search query",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "get users detail based on search query",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Organization ID",
+                        "name": "org_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Department ID",
+                        "name": "dept_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Group ID",
+                        "name": "group_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/User"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
         "/api/channel/": {
             "post": {
                 "security": [
@@ -1483,6 +1537,15 @@ const docTemplate = `{
         "UserUpdateReq": {
             "type": "object",
             "properties": {
+                "active_status": {
+                    "type": "boolean"
+                },
+                "avatar_url": {
+                    "type": "string"
+                },
+                "dept_id": {
+                    "type": "string"
+                },
                 "email": {
                     "type": "string"
                 },
@@ -1491,10 +1554,16 @@ const docTemplate = `{
                     "maxLength": 100,
                     "minLength": 2
                 },
+                "group_id": {
+                    "type": "string"
+                },
                 "last_name": {
                     "type": "string",
                     "maxLength": 100,
                     "minLength": 2
+                },
+                "org_id": {
+                    "type": "string"
                 },
                 "role": {
                     "type": "string"
