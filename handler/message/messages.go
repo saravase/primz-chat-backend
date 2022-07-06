@@ -21,7 +21,7 @@ import (
 func (h *Handler) Messages(c *gin.Context) {
 	id := c.Param("channel_id")
 	ctx := c.Request.Context()
-	channels, err := h.MessageService.GetByChennelID(ctx, id)
+	msgs, err := h.MessageService.GetByChennelID(ctx, id)
 	if err != nil {
 		log.Printf("Failed to get messages based on channel id: %v\n", err.Error())
 		c.JSON(apperrors.Status(err), gin.H{
@@ -29,5 +29,5 @@ func (h *Handler) Messages(c *gin.Context) {
 		})
 		return
 	}
-	c.JSON(http.StatusOK, channels)
+	c.JSON(http.StatusOK, msgs)
 }

@@ -11,3 +11,8 @@ type ConnReq struct {
 	GroupChannel *bool         `json:"group_channel" validate:"required"`
 	ChannelOwner ChannelUser   `json:"channel_owner" validate:"required,dive"`
 } // @name ConnReq
+
+type ChatReq struct {
+	UserID     string   `json:"user_id" validate:"required,len=8"`
+	ChannelIDs []string `json:"channel_ids" validate:"required,gt=0`
+} // @name ChatReq

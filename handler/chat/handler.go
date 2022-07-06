@@ -40,5 +40,6 @@ func NewHandler(c *Config) {
 	}
 	g := c.R.Group(c.BaseURL)
 	g.GET("/:user_id", h.UserConnection)
+	g.POST("/", h.GetChat)
 
 }

@@ -67,6 +67,6 @@ func (h *Handler) Create(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, &handler.CreateResponse{
-		IsCreated: true,
+		ID: org.OrgID,
 	})
 }

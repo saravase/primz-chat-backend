@@ -15,7 +15,7 @@ type User struct {
 	DeptID         string             `bson:"dept_id" json:"dept_id"`
 	GroupID        string             `bson:"group_id" json:"group_id"`
 	PrivChannelIds []string           `bson:"priv_channel_ids" json:"priv_channel_ids"`
-	PubChannelIds  []interface{}      `bson:"pub_channel_ids" json:"pub_channel_ids"`
+	PubChannelIds  []string           `bson:"pub_channel_ids" json:"pub_channel_ids"`
 	ActiveStatus   bool               `bson:"active_status" json:"active_status"`
 	CreatedAt      primitive.DateTime `bson:"created_at" json:"-"`
 	UpdatedAt      primitive.DateTime `bson:"updated_at" json:"-"`

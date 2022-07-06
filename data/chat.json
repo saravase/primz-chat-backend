@@ -1,60 +1,92 @@
-{
-    "user_id" : "6Dfs3F",
-    "first_name" : "Navanitha",
-    "last_name" : "Saravanakumar",
-    "email" : "navanitha@gmail.com",
-    "role" : "Software Manager",
-    "info": {
-        "org_id" : "O7jhG9",
-        "dept_id" : "D67Tjh",
-        "group_id" : "Gg7jR5",
-        "priv_channel_ids" : ["4FdfD4"],
-        "pub_channel_ids" : [],
-        "active_status" : true,
-        "access_role" : "manager"
-    },
-    "priv_chennal_list": [
-        {
-            "id" : "4FdfD4",
-            "user_ids" : ["6Dfs3F", "4Dfs3F"],
-            "name" : "",
-            "group_channel" : false,
-            "message_ids" : [
-                "73fFfG",
-                "Fdg4Gd",
-                "D4Dgg"
-            ],
-            "messages": [
-                {
-                    "id" : "73fFfG",
-                    "user_id": "6Dfs3F",
-                    "text_content": "Hi",
-                    "attachment_url":"",
-                    "seen_user_ids":["4Dfs3F"]
-                }
-            ]
+[
+    {
+      "channel_id": "TQ4qlCyc",
+      "user_ids": [
+        "UbLquAkd",
+        "FtxhgSi7"
+      ],
+      "users": {
+        "FtxhgSi7": {
+          "first_name": "navanitha",
+          "last_name": "saravanakumar",
+          "email": "navanitha@gmail.com",
+          "role": "USER",
+          "avatar_url": "",
+          "active_status": false
+        },
+        "UbLquAkd": {
+          "first_name": "kasthoori",
+          "last_name": "dharmalingam",
+          "email": "kasthoori@gmail.com",
+          "role": "USER",
+          "avatar_url": "",
+          "active_status": false
         }
-    ],
-    "pub_channel_list": [
+      },
+      "messages": [
         {
-            "id" : "4FdfD4",
-            "user_ids" : ["6Dfs3F", "4Dfs3F"],
-            "name" : "",
-            "group_channel" : false,
-            "message_ids" : [
-                "73fFfG",
-                "Fdg4Gd",
-                "D4Dgg"
-            ],
-            "messages": [
-                {
-                    "id" : "73fFfG",
-                    "user_id": "6Dfs3F",
-                    "text_content": "Hi",
-                    "attachment_url":"",
-                    "seen_user_ids":["4Dfs3F"]
-                }
-            ]
+          "msg_id": "YVSqz592",
+          "user_id": "Wj0IgeET",
+          "channel_id": "TQ4qlCyc",
+          "text_content": "Hi kasthoori",
+          "attachment_url": ""
+        },
+        {
+          "msg_id": "iAPctjPI",
+          "user_id": "UbLquAkd",
+          "channel_id": "TQ4qlCyc",
+          "text_content": "Hi saro",
+          "attachment_url": ""
+        },
+        {
+          "msg_id": "gsqW60vV",
+          "user_id": "FtxhgSi7",
+          "channel_id": "TQ4qlCyc",
+          "text_content": "Hi Dad",
+          "attachment_url": ""
+        },
+        {
+          "msg_id": "oi9eNZcm",
+          "user_id": "Wj0IgeET",
+          "channel_id": "TQ4qlCyc",
+          "text_content": "How are you ma? ",
+          "attachment_url": ""
+        },
+        {
+          "msg_id": "bzlAjTJl",
+          "user_id": "FtxhgSi7",
+          "channel_id": "TQ4qlCyc",
+          "text_content": "Fine dad",
+          "attachment_url": ""
+        },
+        {
+          "msg_id": "DJ1QDt4a",
+          "user_id": "Wj0IgeET",
+          "channel_id": "TQ4qlCyc",
+          "text_content": "How are you di? ",
+          "attachment_url": ""
+        },
+        {
+          "msg_id": "M1xVrNVc",
+          "user_id": "UbLquAkd",
+          "channel_id": "TQ4qlCyc",
+          "text_content": "Fine da",
+          "attachment_url": ""
+        },
+        {
+          "msg_id": "8cPf7myG",
+          "user_id": "UbLquAkd",
+          "channel_id": "TQ4qlCyc",
+          "text_content": "Yeppadi thankam irukka ",
+          "attachment_url": ""
+        },
+        {
+          "msg_id": "Fq3Zo8TQ",
+          "user_id": "FtxhgSi7",
+          "channel_id": "TQ4qlCyc",
+          "text_content": "nallarukken ma",
+          "attachment_url": ""
         }
-    ]
-}
+      ]
+    }
+  ]

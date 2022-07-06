@@ -39,7 +39,7 @@ func (h *Handler) Create(c *gin.Context) {
 	copier.Copy(&channel, &req)
 
 	ctx := c.Request.Context()
-	channel_, err := h.ChannelService.GetByUsers(ctx, &channel.Users)
+	tmpChannel, err := h.ChannelService.GetByUsers(ctx, &channel.Users)
 	if err != nil && !errors.As(err, &apperr) {
 		log.Printf("Failed to get channel: %v\n", err.Error())
 		c.JSON(apperrors.Status(err), gin.H{
@@ -48,7 +48,7 @@ func (h *Handler) Create(c *gin.Context) {
 		return
 	}
 
-	if channel_ != nil {
+	if tmpChannel != nil {
 		e := apperrors.NewConflict("users", fmt.Sprintf("%#v\n", channel.Users))
 		log.Printf("Failed to create channel: %v\n", e.Error())
 		c.JSON(e.Status(), gin.H{
@@ -66,7 +66,40 @@ func (h *Handler) Create(c *gin.Context) {
 		return
 	}
 
+	for _, user := range channel.Users {
+		u, err := h.UserService.Get(ctx, user.ID)
+		if err != nil {
+			log.Printf("Unable to find user: %v\n%v", user.ID, err)
+			e := apperrors.NewNotFound("user", user.ID)
+			c.JSON(e.Status(), gin.H{
+				"error": e,
+			})
+			return
+		}
+		if channel.GroupChannel {
+			if u.PubChannelIds != nil {
+				u.PubChannelIds = append(u.PubChannelIds, channel.ChannelID)
+			} else {
+				u.PubChannelIds = []string{channel.ChannelID}
+			}
+		} else {
+			if u.PrivChannelIds != nil {
+				u.PrivChannelIds = append(u.PrivChannelIds, channel.ChannelID)
+			} else {
+				u.PrivChannelIds = []string{channel.ChannelID}
+			}
+		}
+		err = h.UserService.Update(ctx, user.ID, u)
+		if err != nil {
+			log.Printf("Failed to update user: %v\n", err.Error())
+			c.JSON(apperrors.Status(err), gin.H{
+				"error": err,
+			})
+			return
+		}
+	}
+
 	c.JSON(http.StatusOK, &handler.CreateResponse{
-		IsCreated: true,
+		ID: channel.ChannelID,
 	})
 }

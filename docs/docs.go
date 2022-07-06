@@ -756,6 +756,51 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/chat": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get chat details based on channel id's",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "chat"
+                ],
+                "summary": "get chat details based on channel id's",
+                "parameters": [
+                    {
+                        "description": "Chat Request",
+                        "name": "chat_req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ChatReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Chats"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
         "/api/message/": {
             "post": {
                 "security": [
@@ -1351,11 +1396,39 @@ const docTemplate = `{
                 }
             }
         },
+        "ChatReq": {
+            "type": "object",
+            "required": [
+                "user_id"
+            ],
+            "properties": {
+                "channel_ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "Chats": {
+            "type": "object",
+            "properties": {
+                "chats": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/handler.Chat"
+                    }
+                }
+            }
+        },
         "CreateResponse": {
             "type": "object",
             "properties": {
-                "is_created": {
-                    "type": "boolean"
+                "id": {
+                    "type": "string"
                 }
             }
         },
@@ -1524,7 +1597,9 @@ const docTemplate = `{
                 },
                 "pub_channel_ids": {
                     "type": "array",
-                    "items": {}
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "role": {
                     "type": "string"
@@ -1581,6 +1656,75 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "handler.Chat": {
+            "type": "object",
+            "properties": {
+                "channel_id": {
+                    "type": "string"
+                },
+                "messages": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/handler.ChatMessage"
+                    }
+                },
+                "user_ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "users": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/handler.ChatUser"
+                    }
+                }
+            }
+        },
+        "handler.ChatMessage": {
+            "type": "object",
+            "properties": {
+                "attachment_url": {
+                    "type": "string"
+                },
+                "channel_id": {
+                    "type": "string"
+                },
+                "msg_id": {
+                    "type": "string"
+                },
+                "text_content": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "handler.ChatUser": {
+            "type": "object",
+            "properties": {
+                "active_status": {
+                    "type": "boolean"
+                },
+                "avatar_url": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "role": {
                     "type": "string"
                 }
             }

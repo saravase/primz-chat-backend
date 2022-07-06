@@ -33,10 +33,28 @@ definitions:
         minLength: 2
         type: string
     type: object
+  ChatReq:
+    properties:
+      channel_ids:
+        items:
+          type: string
+        type: array
+      user_id:
+        type: string
+    required:
+    - user_id
+    type: object
+  Chats:
+    properties:
+      chats:
+        items:
+          $ref: '#/definitions/handler.Chat'
+        type: array
+    type: object
   CreateResponse:
     properties:
-      is_created:
-        type: boolean
+      id:
+        type: string
     type: object
   DeleteResponse:
     properties:
@@ -144,7 +162,8 @@ definitions:
           type: string
         type: array
       pub_channel_ids:
-        items: {}
+        items:
+          type: string
         type: array
       role:
         type: string
@@ -189,6 +208,51 @@ definitions:
     required:
     - id
     - name
+    type: object
+  handler.Chat:
+    properties:
+      channel_id:
+        type: string
+      messages:
+        items:
+          $ref: '#/definitions/handler.ChatMessage'
+        type: array
+      user_ids:
+        items:
+          type: string
+        type: array
+      users:
+        additionalProperties:
+          $ref: '#/definitions/handler.ChatUser'
+        type: object
+    type: object
+  handler.ChatMessage:
+    properties:
+      attachment_url:
+        type: string
+      channel_id:
+        type: string
+      msg_id:
+        type: string
+      text_content:
+        type: string
+      user_id:
+        type: string
+    type: object
+  handler.ChatUser:
+    properties:
+      active_status:
+        type: boolean
+      avatar_url:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      role:
+        type: string
     type: object
   model.Channel:
     properties:
@@ -815,6 +879,34 @@ paths:
       summary: get channels details based on channel id's
       tags:
       - channel
+  /api/chat:
+    post:
+      description: Get chat details based on channel id's
+      parameters:
+      - description: Chat Request
+        in: body
+        name: chat_req
+        required: true
+        schema:
+          $ref: '#/definitions/ChatReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/Chats'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - ApiKeyAuth: []
+      summary: get chat details based on channel id's
+      tags:
+      - chat
   /api/message/:
     post:
       consumes:
