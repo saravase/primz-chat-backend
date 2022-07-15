@@ -2,10 +2,12 @@ package repository
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/saravase/primz-chat-backend/apperrors"
 	"github.com/saravase/primz-chat-backend/model"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -72,7 +74,18 @@ func (r *mongoUserRepository) Find(ctx context.Context) (users []*model.User, er
 }
 
 func (r *mongoUserRepository) Search(ctx context.Context, queryMap map[string]string) (users []*model.User, err error) {
-	cursor, err := r.collection.Find(ctx, queryMap)
+
+	filter := bson.M{}
+	for key, value := range queryMap {
+		if key == "name" {
+			pattern := fmt.Sprintf("^%s*", value)
+			filter["first_name"] = primitive.Regex{Pattern: pattern}
+		} else {
+			filter[key] = value
+		}
+	}
+
+	cursor, err := r.collection.Find(ctx, filter)
 	if err != nil {
 		return
 	}

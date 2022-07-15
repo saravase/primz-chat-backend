@@ -684,6 +684,10 @@ paths:
         in: query
         name: group_id
         type: string
+      - description: Name filter
+        in: query
+        name: name
+        type: string
       produces:
       - application/json
       responses:

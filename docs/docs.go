@@ -457,6 +457,12 @@ const docTemplate = `{
                         "description": "Group ID",
                         "name": "group_id",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Name filter",
+                        "name": "name",
+                        "in": "query"
                     }
                 ],
                 "responses": {

@@ -17,6 +17,7 @@ import (
 // @Param   org_id  query     string     false  "Organization ID"
 // @Param   dept_id  query     string     false  "Department ID"
 // @Param   group_id  query     string     false  "Group ID"
+// @Param   name  query     string     false  "Name filter"
 // @Success      200  {object}  []model.User
 // @Failure      500  {object}  apperrors.Error
 // @Router       /api/auth/users/search [get]
@@ -30,6 +31,9 @@ func (h *Handler) Search(c *gin.Context) {
 	}
 	if groupID, ok := c.GetQuery("group_id"); ok {
 		queryMap["group_id"] = groupID
+	}
+	if name, ok := c.GetQuery("name"); ok {
+		queryMap["name"] = name
 	}
 	ctx := c.Request.Context()
 	orgs, err := h.UserService.SearchUsers(ctx, queryMap)
